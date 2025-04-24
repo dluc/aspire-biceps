@@ -1,8 +1,11 @@
+using Aspire.Hosting.Azure;
+using Microsoft.Extensions.DependencyInjection;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.WithSecureInfrastructure();
+builder.Services.Configure<AzureProvisioningOptions>(options =>
+    options.ProvisioningBuildOptions.InfrastructureResolvers.Add(new RequireSecureStorageAccess()));
 
 if (builder.ExecutionContext.IsPublishMode)
 {
@@ -16,10 +19,10 @@ else
         .WithDataBindMount(Path.Join("/tmp", "qdrant-data"));
 }
 
-var apiService = builder.AddProject<solution_ApiService>("apiservice")
+var apiService = builder.AddProject<ApiService>("apiservice")
     .WithHttpsHealthCheck("/health");
 
-builder.AddProject<solution_Web>("webfrontend")
+builder.AddProject<Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithHttpsHealthCheck("/health")
     .WithReference(apiService)

@@ -1,27 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
-using Aspire.Hosting.Azure;
 using Azure.Provisioning;
 using Azure.Provisioning.Primitives;
 using Azure.Provisioning.Storage;
-using Microsoft.Extensions.DependencyInjection;
-
-public static class SecurityExtensions
-{
-    public static IDistributedApplicationBuilder WithSecureInfrastructure(
-        this IDistributedApplicationBuilder builder)
-    {
-        builder.Services.Configure<AzureProvisioningOptions>(options =>
-            options.ProvisioningBuildOptions.InfrastructureResolvers.Add(new RequireSecureStorageAccess()));
-
-        return builder;
-    }
-}
 
 public class RequireSecureStorageAccess : InfrastructureResolver
 {
     public override void ResolveProperties(ProvisionableConstruct construct, ProvisioningBuildOptions options)
     {
+        Log($"{nameof(RequireSecureStorageAccess)}.ResolveProperties start");
+
         base.ResolveProperties(construct, options);
 
         foreach (var provisionable in construct.GetProvisionableResources())
@@ -62,19 +50,15 @@ public class RequireSecureStorageAccess : InfrastructureResolver
             return;
         }
 
-        Log($"  - AllowBlobPublicAccess is : {storage.AllowBlobPublicAccess.Value}");
-        Log($"  - EnableHttpsTrafficOnly is: {storage.EnableHttpsTrafficOnly.Value}");
-        Log($"  - AllowSharedKeyAccess is  : {storage.AllowSharedKeyAccess.Value}");
+        Log(storage);
 
         if (!((IBicepValue)storage.AllowBlobPublicAccess).IsOutput)
         {
-            Log("  - Setting AllowBlobPublicAccess to false");
             storage.AllowBlobPublicAccess = false;
         }
 
         if (!((IBicepValue)storage.EnableHttpsTrafficOnly).IsOutput)
         {
-            Log("  - Setting EnableHttpsTrafficOnly to true");
             storage.EnableHttpsTrafficOnly = true;
         }
 
@@ -83,10 +67,35 @@ public class RequireSecureStorageAccess : InfrastructureResolver
             Log("  - Setting AllowSharedKeyAccess to false");
             storage.AllowSharedKeyAccess = false;
         }
+
+        Log(storage);
+    }
+
+    private const string LogFile = "provision.log";
+
+    private static void Log(StorageAccount storage)
+    {
+        try
+        {
+            File.AppendAllText(LogFile, $"  - AllowBlobPublicAccess is : {storage.AllowBlobPublicAccess.Value}\n");
+            File.AppendAllText(LogFile, $"  - EnableHttpsTrafficOnly is : {storage.EnableHttpsTrafficOnly.Value}\n");
+            File.AppendAllText(LogFile, $"  - AllowSharedKeyAccess is : {storage.AllowSharedKeyAccess.Value}\n");
+        }
+        catch (Exception e)
+        {
+            File.AppendAllText(LogFile, e.ToString());
+        }
     }
 
     private static void Log(string text)
     {
-        File.AppendAllText("provision.log", text + "\n");
+        try
+        {
+            File.AppendAllText(LogFile, $"{text}\n");
+        }
+        catch (Exception e)
+        {
+            File.AppendAllText(LogFile, e.ToString());
+        }
     }
 }

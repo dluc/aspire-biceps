@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.0.0
 MinimumVisualStudioVersion = 17.8.0.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "solution.AppHost", "solution.AppHost\solution.AppHost.csproj", "{714782D6-98BB-47A5-962B-110FF71584E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppHost", "AppHost\AppHost.csproj", "{714782D6-98BB-47A5-962B-110FF71584E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "solution.ServiceDefaults", "solution.ServiceDefaults\solution.ServiceDefaults.csproj", "{886A45D3-71C6-4C1B-8FA0-A915E40DCBD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceDefaults", "ServiceDefaults\ServiceDefaults.csproj", "{886A45D3-71C6-4C1B-8FA0-A915E40DCBD8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "solution.ApiService", "solution.ApiService\solution.ApiService.csproj", "{AA39B0CF-0719-43DB-ABD4-4A0099F20126}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiService", "ApiService\ApiService.csproj", "{AA39B0CF-0719-43DB-ABD4-4A0099F20126}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "solution.Web", "solution.Web\solution.Web.csproj", "{7AB418D7-3F4A-4E39-8662-82C4391A6469}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{7AB418D7-3F4A-4E39-8662-82C4391A6469}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
